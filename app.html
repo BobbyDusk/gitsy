@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        chrome.storage.sync.get(["gitsy_api_key"], function (result) {
+          const apiKeyInput = document.getElementById("gitsy-api-key");
+          if (result.gitsy_api_key) {
+            apiKeyInput.value = result.gitsy_api_key;
+          }
+
+          apiKeyInput.addEventListener("input", function () {
+            const newApiKey = apiKeyInput.value;
+            chrome.storage.sync.set({ gitsy_api_key: newApiKey }, function () {
+              console.log("GitSy API key saved:", newApiKey);
+            });
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Gitsy</h1>
+    <label for="gitsy-api-key">Github API key</label>
+    <input type="text" id="gitsy-api-key" name="gitsy-api-key" />
+  </body>
+</html>
