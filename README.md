@@ -6,5 +6,5 @@
 
 - Adds number of stars to github links.
 
-![Before and After when using the Gitsy browser extension](/images/before_after.png)
+![Before and After when using the Gitsy browser extension](/images/before_after_2.png)
 
