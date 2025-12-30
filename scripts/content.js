@@ -1,6 +1,7 @@
-function getRepoDataFromStorage(owner, repo) {
+async function getRepoDataFromStorage(owner, repo) {
     gitsyDateKey = `gitsy_date_${owner}_${repo}`;
-    const savedDate = localStorage.getItem(gitsyDateKey);
+    const savedDateResult = await chrome.storage.local.get(gitsyDateKey);
+    const savedDate = savedDateResult[gitsyDateKey];
     if (savedDate != null) {
         const currentTime = Date.now();
         const elapsedTime = currentTime - parseInt(savedDate);
@@ -10,29 +11,31 @@ function getRepoDataFromStorage(owner, repo) {
         }
     }
     gitsyKey = `gitsy_${owner}_${repo}`;
-    rawData = localStorage.getItem(gitsyKey);
-    if (rawData == null) {
+    const dataResult = await chrome.storage.local.get(gitsyKey);
+    const data = dataResult[gitsyKey];
+    if (data == null) {
         return null;
     } else {
-        return JSON.parse(rawData);
+        return data;
     }
 }
 
 function saveRepoDataToStorage(owner, repo, data) {
     gitsyKey = `gitsy_${owner}_${repo}`;
     gitsyDateKey = `gitsy_date_${owner}_${repo}`;
-    localStorage.setItem(gitsyKey, JSON.stringify(data));
-    localStorage.setItem(gitsyDateKey, Date.now());
+    chrome.storage.local.set({ [gitsyKey]: data });
+    chrome.storage.local.set({ [gitsyDateKey]: Date.now() });
 }
 
-function getGithubApiKey() {
-    const apiKey = localStorage.getItem('gitsy_github_api_key');
-    return apiKey;
+async function getGithubApiKey() {
+    const result = await chrome.storage.sync.get('gitsy_api_key');
+    return result.gitsy_api_key;
 }
 
 async function addInfoToGithubLinks() {
     const githubLinkPattern = /https?:\/\/github\.com\/([\w-]+)\/([\w-]+)(\/[\w-./?%&=]*)?/g;
     const links = document.querySelectorAll('a[href*="github.com"]');
+    const apiKey = await getGithubApiKey();
 
     links.forEach(async link => {
         const match = link.href.match(githubLinkPattern);
@@ -40,7 +43,6 @@ async function addInfoToGithubLinks() {
             const owner = link.href.split('/')[3];
             const repo = link.href.split('/')[4];
             const apiUrl = `https://api.github.com/graphql`;
-            const token = getGithubApiKey();
             const query = `{
                 repository(owner:"${owner}", name:"${repo}") {
                     stargazerCount,
@@ -56,13 +58,13 @@ async function addInfoToGithubLinks() {
                 }
             }`;
 
-            let data = getRepoDataFromStorage(owner, repo);
+            let data = await getRepoDataFromStorage(owner, repo);
             if (data == null) {
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${token}`,
+                            'Authorization': `Bearer ${apiKey}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ query })

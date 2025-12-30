@@ -3,6 +3,9 @@
   "description": "Browser extension that enhances Github links with useful information.",
   "version": "1.0",
   "manifest_version": 3,
+  "permissions": [
+    "storage"
+  ],
   "action": {
     "default_popup": "app.html",
     "default_icon": "images/icon_white.png"
