@@ -3,12 +3,38 @@
 <head>
   <title>Gitsy Settings</title>
   <script src="app.js" defer></script>
+  <style>
+    html,
+    body {
+      font-size: 14px;
+    }
+
+    main {
+      width: 350px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    h1,
+    p {
+      margin: 0;
+    }
+  </style>
 </head>
 
-<body>
-  <h1>Gitsy</h1>
-  <label for="gitsy-api-key">Github API key</label>
-  <input type="text" id="gitsy-api-key" name="gitsy-api-key" />
+<body style="height: fit-content;">
+  <main>
+    <h1>Gitsy</h1>
+    <div>
+      <label for="gitsy-api-key" style="font-weight: bold;">Github API Token</label>
+      <textarea id="gitsy-api-key" style="width: 100%;" name="gitsy-api-key" rows="4"
+        placeholder="Your Github API Token"></textarea>
+    </div>
+    <p>For instructions, check out the <a target="_blank" href="https://github.com/BobbyDusk/gitsy">GitHub
+        repository</a>.</p>
+  </main>
 </body>
 
 </html>
