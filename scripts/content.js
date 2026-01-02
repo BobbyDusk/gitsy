@@ -104,6 +104,9 @@ async function addInfoToGithubLinks() {
                     tooltipContainer.style.height = `${linkHeight}px`;
                     tooltipContainer.style.left = `0px`;
                     tooltipContainer.style.top = `0px`;
+                    tooltipContainer.style.lineHeight = '1em';
+                    tooltipContainer.style.fontSize = '1rem';
+                    tooltipContainer.style.textAlign = 'left';
                     link.appendChild(tooltipContainer);
 
                     const tooltip = document.createElement('div');
@@ -116,12 +119,18 @@ async function addInfoToGithubLinks() {
                     tooltip.style.borderRadius = '5px';
                     tooltip.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
                     tooltip.style.fontSize = '0.8em';
-                    tooltip.style.top = 'calc(100% + 10px)';
+                    const linkRect = link.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - linkRect.bottom;
+                    const estimatedTooltipHeight = 300;
+                    if (spaceBelow >= estimatedTooltipHeight) {
+                        tooltip.style.top = 'calc(100% + 10px)';
+                    } else {
+                        tooltip.style.bottom = 'calc(100% + 10px)';
+                    }
                     const tooltipLeft = (linkWidth - tooltipWidth) / 2;
                     if (tooltipLeft >= 0) {
                         tooltip.style.left = `${tooltipLeft}px`;
                     } else {
-                        const linkRect = link.getBoundingClientRect();
                         const spaceOnLeft = linkRect.left;
                         const spaceOnRight = window.innerWidth - linkRect.right;
                         if (spaceOnLeft < Math.abs(tooltipLeft)) {
