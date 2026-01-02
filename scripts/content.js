@@ -79,17 +79,20 @@ async function addInfoToGithubLinks() {
 
             try {
                 if (typeof data.stargazersCount != undefined) {
-                    const infoSpan = document.createElement('span');
-                    infoSpan.style.fontSize = '0.9em';
-                    let formattedStargazers = data.stargazerCount;
-                    if (formattedStargazers >= 100000) {
-                        formattedStargazers = (formattedStargazers / 1000).toFixed(0) + 'k';
-                    } else if (formattedStargazers >= 1000) {
-                        formattedStargazers = (formattedStargazers / 1000).toFixed(1) + 'k';
+                    if (link.innerText && link.innerText.trim()) {
+                        const infoSpan = document.createElement('span');
+                        infoSpan.style.fontSize = '0.9em';
+                        let formattedStargazers = data.stargazerCount;
+                        if (formattedStargazers >= 100000) {
+                            formattedStargazers = (formattedStargazers / 1000).toFixed(0) + 'k';
+                        } else if (formattedStargazers >= 1000) {
+                            formattedStargazers = (formattedStargazers / 1000).toFixed(1) + 'k';
+                        }
+                        infoSpan.textContent = ` (⭐ ${formattedStargazers})`;
+                        link.appendChild(infoSpan);
                     }
-                    infoSpan.textContent = ` (⭐ ${formattedStargazers})`;
+
                     link.style.position = 'relative';
-                    link.appendChild(infoSpan);
                     const linkWidth = link.offsetWidth;
                     const linkHeight = link.offsetHeight;
                     const tooltipContainer = document.createElement('span');
