@@ -117,10 +117,20 @@ async function addInfoToGithubLinks() {
                     tooltip.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
                     tooltip.style.fontSize = '0.8em';
                     tooltip.style.top = 'calc(100% + 10px)';
-                    if (linkWidth < tooltipWidth) {
-                        tooltip.style.left = `-${(tooltipWidth - linkWidth) / 2}px`;
+                    const tooltipLeft = (linkWidth - tooltipWidth) / 2;
+                    if (tooltipLeft >= 0) {
+                        tooltip.style.left = `${tooltipLeft}px`;
                     } else {
-                        tooltip.style.left = `${(linkWidth - tooltipWidth) / 2}px`;
+                        const linkRect = link.getBoundingClientRect();
+                        const spaceOnLeft = linkRect.left;
+                        const spaceOnRight = window.innerWidth - linkRect.right;
+                        if (spaceOnLeft < Math.abs(tooltipLeft)) {
+                            tooltip.style.left = `0px`;
+                        } else if (spaceOnRight < Math.abs(tooltipLeft)) {
+                            tooltip.style.right = `0px`;
+                        } else {
+                            tooltip.style.left = `${tooltipLeft}px`;
+                        }
                     }
                     tooltip.style.width = `${tooltipWidth}px`;
                     tooltip.style.pointerEvents = 'none';
