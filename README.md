@@ -26,3 +26,7 @@
    2. Go to your [personal access tokens](https://github.com/settings/personal-access-tokens) (**your github account -> Settings -> Developer Settings -> Personal Access Token -> Fine-grained tokens**)
    3. Generate a new token with **Expiration: No Expiration** and **Repository Access: Public Repositories** (default).
    4. Copy and paste your github token into Gitsy extension pop-up.
+
+## License
+
+This project is distrubuted under GNU GPLv3. See the COPYING file for more info.

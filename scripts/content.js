@@ -104,8 +104,8 @@ async function addInfoToGithubLinks() {
                     tooltipContainer.style.height = `${linkHeight}px`;
                     tooltipContainer.style.left = `0px`;
                     tooltipContainer.style.top = `0px`;
-                    tooltipContainer.style.lineHeight = '1em';
                     tooltipContainer.style.fontSize = '1rem';
+                    tooltipContainer.style.lineHeight = '1rem';
                     tooltipContainer.style.textAlign = 'left';
                     link.appendChild(tooltipContainer);
 
