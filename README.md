@@ -5,9 +5,6 @@
 ## Functionality
 
 - Adds number of stars to github links.
-
-![Before and After when using the Gitsy browser extension](/images/before_after_2.png)
-
 - Adds extra information when hovering over a github link, including:
   - A Description of the Repo
   - Number of Stars ⭐
@@ -16,7 +13,7 @@
   - Number of Open PRs 🔃
   - Time since last push ⏱
 
-![Video of hover functionality](/images/hover.gif)
+![Video of hover functionality](/images/before_and_after_24fps.gif)
 
 ## Installation
 
