@@ -1,82 +1,15 @@
-async function getRepoDataFromStorage(owner, repo) {
-    gitsyDateKey = `gitsy_date_${owner}_${repo}`;
-    const savedDateResult = await chrome.storage.local.get(gitsyDateKey);
-    const savedDate = savedDateResult[gitsyDateKey];
-    if (savedDate != null) {
-        const currentTime = Date.now();
-        const elapsedTime = currentTime - parseInt(savedDate);
-        const oneWeek = 7 * 24 * 60 * 60 * 1000;
-        if (elapsedTime > oneWeek) {
-            return null;
-        }
-    }
-    gitsyKey = `gitsy_${owner}_${repo}`;
-    const dataResult = await chrome.storage.local.get(gitsyKey);
-    const data = dataResult[gitsyKey];
-    if (data == null) {
-        return null;
-    } else {
-        return data;
-    }
-}
-
-function saveRepoDataToStorage(owner, repo, data) {
-    gitsyKey = `gitsy_${owner}_${repo}`;
-    gitsyDateKey = `gitsy_date_${owner}_${repo}`;
-    chrome.storage.local.set({ [gitsyKey]: data });
-    chrome.storage.local.set({ [gitsyDateKey]: Date.now() });
-}
-
-async function getGithubApiKey() {
-    const result = await chrome.storage.sync.get('gitsy_api_key');
-    return result.gitsy_api_key;
-}
+import { fetchRepoData } from './api.js';
 
 async function addInfoToGithubLinks() {
     const githubLinkPattern = /https?:\/\/github\.com\/([\w-]+)\/([\w-]+)(\/[\w-./?%&=]*)?/g;
     const links = document.querySelectorAll('a[href*="github.com"]');
-    const apiKey = await getGithubApiKey();
 
     links.forEach(async link => {
         const match = link.href.match(githubLinkPattern);
         if (match) {
             const owner = link.href.split('/')[3];
             const repo = link.href.split('/')[4];
-            const apiUrl = `https://api.github.com/graphql`;
-            const query = `{
-                repository(owner:"${owner}", name:"${repo}") {
-                    stargazerCount,
-                    description,
-                    pushedAt,
-                    forkCount,
-                    issues(states:[OPEN]) {
-                        totalCount
-                    },
-                    pullRequests(states:[OPEN]) {
-                        totalCount
-                    }
-                }
-            }`;
-
-            let data = await getRepoDataFromStorage(owner, repo);
-            if (data == null) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${apiKey}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ query })
-                    })
-                    const rawData = await response.json();
-                    data = rawData.data.repository;
-                    saveRepoDataToStorage(owner, repo, data);
-                } catch (error) {
-                    return;
-                }
-            }
-
+            let data = await fetchRepoData(owner, repo);
             try {
                 if (typeof data.stargazersCount != undefined) {
                     if (link.innerText && link.innerText.trim()) {

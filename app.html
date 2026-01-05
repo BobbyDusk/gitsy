@@ -2,7 +2,7 @@
 
 <head>
   <title>Gitsy Settings</title>
-  <script src="app.js" defer></script>
+  <script type="module" src="app.js" defer></script>
   <style>
     html,
     body {
@@ -21,6 +21,12 @@
     p {
       margin: 0;
     }
+
+    #gitsy-api-validation {
+      font-size: 12px;
+      margin-top: 3px;
+      text-align: right;
+    }
   </style>
 </head>
 
@@ -31,6 +37,7 @@
       <label for="gitsy-api-key" style="font-weight: bold;">Github API Token</label>
       <textarea id="gitsy-api-key" style="width: 100%;" name="gitsy-api-key" rows="4"
         placeholder="Your Github API Token"></textarea>
+        <p id="gitsy-api-validation"></p>
     </div>
     <p>For instructions, check out the <a target="_blank" href="https://github.com/BobbyDusk/gitsy">GitHub
         repository</a>.</p>

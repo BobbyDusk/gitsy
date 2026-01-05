@@ -1,23 +1,34 @@
-document.addEventListener("DOMContentLoaded", function () {
-    chrome.storage.sync.get(["gitsy_api_key"], function (result) {
-        const apiKeyInput = document.getElementById("gitsy-api-key");
-        if (result.gitsy_api_key) {
-            apiKeyInput.value = result.gitsy_api_key;
-        }
+import { getGithubApiKey, setGithubApiKey, fetchRepoData } from './scripts/api.js';
 
-        function setApiKey(newApiKey) {
-            chrome.storage.sync.set({ gitsy_api_key: newApiKey }, function () {
-            });
-        }
+async function validateApiKey(apiKey) {
+    const data = await fetchRepoData('BobbyDusk', 'gitsy', true);
+    const validationElement = document.getElementById("gitsy-api-validation");
+    if (data) {
+        validationElement.textContent = "API Key is valid!";
+        validationElement.style.color = "green";
+    } else {
+        validationElement.textContent = "API Key is invalid or missing.";
+        validationElement.style.color = "red";
+    }
+}
 
-        let debounceDuration = 500;
-        let debounceTimer;
-        apiKeyInput.addEventListener("input", function () {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(function () {
-                const newApiKey = apiKeyInput.value;
-                setApiKey(newApiKey);
-            }, debounceDuration);
-        });
+document.addEventListener("DOMContentLoaded", async function () {
+    const apiKey = await getGithubApiKey();
+    validateApiKey(apiKey);
+    const apiKeyInput = document.getElementById("gitsy-api-key");
+    if (apiKey) {
+        apiKeyInput.value = apiKey;
+    }
+
+
+    let debounceDuration = 500;
+    let debounceTimer;
+    apiKeyInput.addEventListener("input", function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(async function () {
+            const newApiKey = apiKeyInput.value;
+            setGithubApiKey(newApiKey);
+            validateApiKey(newApiKey);
+        }, debounceDuration);
     });
 });
