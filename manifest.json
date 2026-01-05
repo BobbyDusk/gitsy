@@ -8,7 +8,7 @@
   ],
   "action": {
     "default_popup": "app.html",
-    "default_icon": "images/icon_white.png"
+    "default_icon": "images/icon.png"
   },
   "icons": {
     "16": "images/icon-16.png",
