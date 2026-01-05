@@ -17,7 +17,7 @@
 
 ## Installation
 
-1. Install the extension from the [Chrome Web Store](https://example.com)
+1. Install the extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/gitsy/anonikabdplepoefnmeiloffpaeffmmn)
 2. Generate a github Token
    1. Make sure you're logged into your github account.
    2. Go to your [personal access tokens](https://github.com/settings/personal-access-tokens) (**your github account -> Settings -> Developer Settings -> Personal Access Token -> Fine-grained tokens**)
