@@ -84,5 +84,3 @@ async function fetchRepoData(owner, repo, forceFresh = false, saveData=true) {
 
     return data;
 }
-
-export { getGithubApiKey, setGithubApiKey, fetchRepoData };

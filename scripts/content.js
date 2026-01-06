@@ -1,5 +1,3 @@
-import { fetchRepoData } from './api.js';
-
 async function addInfoToGithubLinks() {
     const githubLinkPattern = /https?:\/\/github\.com\/([\w-]+)\/([\w-]+)(\/[\w-./?%&=]*)?/g;
     const links = document.querySelectorAll('a[href*="github.com"]');
@@ -11,10 +9,10 @@ async function addInfoToGithubLinks() {
             const repo = link.href.split('/')[4];
             let data = await fetchRepoData(owner, repo);
             try {
-                if (typeof data.stargazersCount != undefined) {
+                if (typeof data.stargazerCount != undefined) {
                     if (link.innerText && link.innerText.trim()) {
                         const infoSpan = document.createElement('span');
-                        infoSpan.style.fontSize = '0.9em';
+                        infoSpan.className = 'gitsy-info-span';
                         let formattedStargazers = data.stargazerCount;
                         if (formattedStargazers >= 100000) {
                             formattedStargazers = (formattedStargazers / 1000).toFixed(0) + 'k';
@@ -29,29 +27,15 @@ async function addInfoToGithubLinks() {
                     const linkWidth = link.offsetWidth;
                     const linkHeight = link.offsetHeight;
                     const tooltipContainer = document.createElement('span');
-                    tooltipContainer.className = 'github-tooltip';
-                    tooltipContainer.style.position = 'absolute';
-                    tooltipContainer.style.backgroundColor = 'transparent';
-                    tooltipContainer.style.zIndex = '1000';
+                    tooltipContainer.className = 'gitsy-tooltip-container';
+                    link.appendChild(tooltipContainer);
                     tooltipContainer.style.width = `${linkWidth}px`;
                     tooltipContainer.style.height = `${linkHeight}px`;
-                    tooltipContainer.style.left = `0px`;
-                    tooltipContainer.style.top = `0px`;
-                    tooltipContainer.style.fontSize = '1rem';
-                    tooltipContainer.style.lineHeight = '1rem';
-                    tooltipContainer.style.textAlign = 'left';
-                    link.appendChild(tooltipContainer);
+
 
                     const tooltip = document.createElement('div');
+                    tooltip.className = 'gitsy-tooltip';
                     const tooltipWidth = 200;
-                    tooltip.style.display = 'none';
-                    tooltip.style.position = 'absolute';
-                    tooltip.style.background = '#333';
-                    tooltip.style.color = '#fff';
-                    tooltip.style.padding = '10px';
-                    tooltip.style.borderRadius = '5px';
-                    tooltip.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-                    tooltip.style.fontSize = '0.8em';
                     const linkRect = link.getBoundingClientRect();
                     const spaceBelow = window.innerHeight - linkRect.bottom;
                     const estimatedTooltipHeight = 300;
@@ -75,9 +59,7 @@ async function addInfoToGithubLinks() {
                         }
                     }
                     tooltip.style.width = `${tooltipWidth}px`;
-                    tooltip.style.pointerEvents = 'none';
-                    tooltip.style.flexDirection = 'column';
-                    tooltip.style.gap = '0.8em';
+                    tooltip.style.display = 'none';
                     tooltipContainer.appendChild(tooltip);
 
                     tooltipContainer.addEventListener('mouseenter', () => {
@@ -89,32 +71,22 @@ async function addInfoToGithubLinks() {
                     });
 
                     const title = document.createElement('h4');
-                    title.style.fontSize = '1.0em';
-                    title.style.margin = '0';
                     title.textContent = `${owner}/${repo}`;
                     tooltip.appendChild(title);
 
                     const description = document.createElement('p');
-                    description.style.margin = '0';
-                    description.style.fontSize = '0.9em';
                     description.textContent = data.description || 'No description available.';
                     tooltip.appendChild(description);
 
                     const starsAndForks = document.createElement('p')
-                    starsAndForks.style.margin = '0';
-                    starsAndForks.style.fontSize = '0.9em';
                     starsAndForks.innerHTML = `⭐ Stars ${data.stargazerCount.toLocaleString('en-US')}<br/>🍴 Forks: ${data.forkCount.toLocaleString('en-US')}`;
                     tooltip.appendChild(starsAndForks);
 
                     const issuesAndPRs = document.createElement('p');
-                    issuesAndPRs.style.margin = '0';
-                    issuesAndPRs.style.fontSize = '0.9em';
                     issuesAndPRs.innerHTML = `🐛 Open Issues: ${data.issues.totalCount.toLocaleString('en-US')}<br/>🔃 Open PRs: ${data.pullRequests.totalCount.toLocaleString('en-US')}`;
                     tooltip.appendChild(issuesAndPRs);
 
                     const timeSinceLastPush = document.createElement('p');
-                    timeSinceLastPush.style.margin = '0';
-                    timeSinceLastPush.style.fontSize = '0.9em';
                     const pushedDate = new Date(data.pushedAt);
                     const now = new Date();
                     const diffTime = Math.abs(now - pushedDate);
@@ -144,4 +116,9 @@ async function addInfoToGithubLinks() {
     });
 }
 
-window.onload = addInfoToGithubLinks;
+if (window.location.hostname.includes('github.com')) {
+    // Github pages seem to load content dynamically, so delay execution
+    setTimeout(addInfoToGithubLinks, 1000);
+} else {
+    addInfoToGithubLinks();
+}

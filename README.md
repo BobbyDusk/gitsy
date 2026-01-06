@@ -13,7 +13,7 @@
   - Number of Open PRs 🔃
   - Time since last push ⏱
 
-![Video of hover functionality](/promo_mages/before_and_after_24fps.gif)
+![Video of hover functionality](/promo_images/before_and_after_24fps.gif)
 
 ## Installation
 
