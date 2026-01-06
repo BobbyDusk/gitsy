@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build directories
+dist/
+build/
+*.zip
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Environment files
+.env
+.env.local
+
+# Extension store files
+*.pem
+*.crx
+
+# Temporary files
+*.log
+*.tmp
+*.swp
+*~
+
+# OS specific
+Thumbs.db
+Desktop.ini
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
