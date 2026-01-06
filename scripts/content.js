@@ -5,8 +5,15 @@ async function addInfoToGithubLinks() {
     links.forEach(async link => {
         const match = link.href.match(githubLinkPattern);
         if (match) {
-            const owner = link.href.split('/')[3];
-            const repo = link.href.split('/')[4];
+            const parts = match[0].split('/');
+            const owner = parts[3];
+            const repo = parts[4];
+            const type = parts[5] || '';
+
+            if (type.toLowerCase() === 'issues' || type.toLowerCase() === 'pull') {
+                return;
+            }
+
             let data = await fetchRepoData(owner, repo);
             try {
                 if (typeof data.stargazerCount != undefined) {
