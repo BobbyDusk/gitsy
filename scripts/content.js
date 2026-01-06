@@ -44,7 +44,7 @@ async function addInfoToGithubLinks() {
                     tooltip.className = 'gitsy-tooltip';
                     const tooltipWidth = 200;
                     const linkRect = link.getBoundingClientRect();
-                    const spaceBelow = window.innerHeight - linkRect.bottom;
+                    const spaceBelow = document.documentElement.scrollHeight - linkRect.bottom;
                     const estimatedTooltipHeight = 300;
                     if (spaceBelow >= estimatedTooltipHeight) {
                         tooltip.style.top = 'calc(100% + 10px)';
