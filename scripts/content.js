@@ -1,5 +1,5 @@
 async function addInfoToGithubLinks() {
-    const githubLinkPattern = /https?:\/\/github\.com\/([\w-]+)\/([\w-]+)(\/[\w-./?%&=]*)?/g;
+    const githubLinkPattern = /https?:\/\/github\.com\/([\w.-]+)\/([\w.-]+)(\/[\w-./?%&=]*)?/g;
     const links = document.querySelectorAll('a[href*="github.com"]');
 
     links.forEach(async link => {
