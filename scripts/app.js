@@ -1,6 +1,4 @@
-import { getGithubApiKey, setGithubApiKey, fetchRepoData } from './scripts/api.js';
-
-async function validateApiKey(apiKey) {
+async function validateStoredApiKey() {
     const data = await fetchRepoData('BobbyDusk', 'gitsy', true);
     const validationElement = document.getElementById("gitsy-api-validation");
     if (data) {
@@ -14,11 +12,11 @@ async function validateApiKey(apiKey) {
 
 document.addEventListener("DOMContentLoaded", async function () {
     const apiKey = await getGithubApiKey();
-    validateApiKey(apiKey);
     const apiKeyInput = document.getElementById("gitsy-api-key");
     if (apiKey) {
         apiKeyInput.value = apiKey;
     }
+    validateStoredApiKey();
 
 
     let debounceDuration = 500;
@@ -28,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         debounceTimer = setTimeout(async function () {
             const newApiKey = apiKeyInput.value;
             setGithubApiKey(newApiKey);
-            validateApiKey(newApiKey);
+            validateStoredApiKey();
         }, debounceDuration);
     });
 });
